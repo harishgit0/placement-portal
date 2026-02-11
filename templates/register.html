@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login</title>
+    <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"rel="stylesheet"
 >
 
@@ -107,53 +107,43 @@
             <div class="login-box">
                 <!-- login form -->
                 <div id="innertext">
-                        <h2>Login</h2>
+                        <h2>Register</h2>
                     </div>
 
                     <div id="innerline">
-                        <p>Welcome back</p>
-                        <h5>Enter your details to login</h5>
+                        <p>Welcome</p>
+                        <h5>Enter your details to Register</h5>
                     </div>
 
                     <div id="form">
-                        <form action="{{ url_for('login') }}" method="POST">
+                        <form action="{{ url_for('register') }}" method="POST">
 
                             <div class="mb-3">
-                                <label for="email" class="form-label">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    id="email"
-                                    name="email"
-                                    required
-                                >
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">
-                                    Password
-                                </label>
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    id="password"
-                                    name="password"
-                                    required
-                                >
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">
-                                Login
-                            </button>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select class="form-control" id="role" name="role" required>
+                                    <option value="student">Student</option>
+                                    <option value="company">Company</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
 
                         </form>
                     </div>
 
                     <div class="register-link">
-                        <p>New user?</p>
-                        <a href="{{ url_for('register') }}">Register</a>
+                        <p>Already have an account?</p>
+                        <a href="{{url_for('login')}}">Login</a>
                     </div>
             </div>
         </div>

@@ -37,6 +37,22 @@ def login():
                 login_user(user)
                 # return redirect('/dashboard')
         return render_template('login.html',error='Invalid email or password')
+    
+
+@app.route('/register',methods=['GET','POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+    else:
+        email=request.form.get('email')
+        password=request.form.get('password')
+        role=request.form.get('role')
+        if email and password and role:
+            user = User(email=email,password=password,role=role)
+            db.session.add(user)
+            db.session.commit()
+            return redirect('/login')
+        return render_template('register.html',error='Invalid email or password')
 
 # --------- DATABASE CREATION + ADMIN ----------
 with app.app_context():
