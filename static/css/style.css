@@ -1,0 +1,159 @@
+/* ------- Home page styles -------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* Navbar background */
+.custom-navbar {
+    background-color: rgba(0, 0, 0, 0.93);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Brand text */
+.custom-navbar .navbar-brand {
+    color: #ffffff !important;
+    font-size: 28px;
+    font-weight: 600;
+    margin-left: 20px;
+    letter-spacing: 1px;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #ffffff !important;
+}
+
+/* Nav links (default) */
+.custom-navbar .nav-link {
+    color: #e0e0e0 !important;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 30px;
+}
+
+/* Hover + Active */
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+    color: #e0e0e0!important;
+}
+
+/* Dropdown menu */
+.custom-navbar .dropdown-menu {
+    background-color: #2b2b3d;
+    border: none;
+}
+
+/* Dropdown items */
+.custom-navbar .dropdown-item {
+    color: #ffffff;
+}
+
+.custom-navbar .dropdown-item:hover {
+    background-color: #0dcaf0;
+    color: #000;
+}
+
+/* Enable dropdown on hover */
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+/* Smooth dropdown */
+.dropdown-menu {
+    transition: all 0.2s ease-in-out;
+}
+
+
+/* ----------Login page styles--------- */
+
+.login-box {
+    margin-left: 60px;
+    margin-top: 50px;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+    width: 550px;
+    height: 650px;
+    text-align: center;
+}
+
+/* Heading */
+#innertext {
+    text-align: left;
+}
+
+/* Subtitle section */
+#innerline {
+    text-align: left;
+    margin-top: 25px;
+    font-size: 19px;
+}
+
+#innerline p {
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 25px;
+}
+
+#innerline h5 {
+    font-weight: 500;
+    color: #777;
+}
+
+/* Form */
+#form {
+    text-align: left;
+    margin-top: 40px;
+}
+
+/* Register link */
+.register-link {
+    margin-top: 30px;
+}
+
+.register-link p {
+    margin-bottom: 5px;
+}
+
+.register-link a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #0d6efd;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+
+#login {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+#Lleft {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Lright {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#Lright img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
