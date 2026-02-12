@@ -1,4 +1,4 @@
-/* ------- Home page styles -------- */
+/* ================= GLOBAL RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -7,15 +7,16 @@
 
 html, body {
     height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fb;
 }
 
-/* Navbar background */
+/* ================= HOME PAGE STYLES ================= */
+
 .custom-navbar {
     background-color: rgba(0, 0, 0, 0.93);
-    font-family: 'Poppins', sans-serif;
 }
 
-/* Brand text */
 .custom-navbar .navbar-brand {
     color: #ffffff !important;
     font-size: 28px;
@@ -24,11 +25,6 @@ html, body {
     letter-spacing: 1px;
 }
 
-.custom-navbar .navbar-brand:hover {
-    color: #ffffff !important;
-}
-
-/* Nav links (default) */
 .custom-navbar .nav-link {
     color: #e0e0e0 !important;
     font-size: 18px;
@@ -36,19 +32,17 @@ html, body {
     margin-left: 30px;
 }
 
-/* Hover + Active */
 .custom-navbar .nav-link:hover,
 .custom-navbar .nav-link.active {
-    color: #e0e0e0!important;
+    color: #ffffff !important;
 }
 
-/* Dropdown menu */
+/* Dropdown */
 .custom-navbar .dropdown-menu {
     background-color: #2b2b3d;
     border: none;
 }
 
-/* Dropdown items */
 .custom-navbar .dropdown-item {
     color: #ffffff;
 }
@@ -58,80 +52,22 @@ html, body {
     color: #000;
 }
 
-/* Enable dropdown on hover */
-.nav-item.dropdown:hover > .dropdown-menu {
-    display: block;
-    margin-top: 0;
+/* Hero Section */
+#Hfeed {
+    background: linear-gradient(to right, #f8f9fa, #eef3ff);
 }
 
-/* Smooth dropdown */
-.dropdown-menu {
-    transition: all 0.2s ease-in-out;
+#Hfeed h1 {
+    font-size: 3rem;
+    color: #1a1a1a;
 }
 
-
-/* ----------Login page styles--------- */
-
-.login-box {
-    margin-left: 60px;
-    margin-top: 50px;
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
-    width: 550px;
-    height: 650px;
-    text-align: center;
+#Hfeed p {
+    max-width: 520px;
+    color: #444;
 }
 
-/* Heading */
-#innertext {
-    text-align: left;
-}
-
-/* Subtitle section */
-#innerline {
-    text-align: left;
-    margin-top: 25px;
-    font-size: 19px;
-}
-
-#innerline p {
-    margin-bottom: 5px;
-    color: #555;
-    font-size: 25px;
-}
-
-#innerline h5 {
-    font-weight: 500;
-    color: #777;
-}
-
-/* Form */
-#form {
-    text-align: left;
-    margin-top: 40px;
-}
-
-/* Register link */
-.register-link {
-    margin-top: 30px;
-}
-
-.register-link p {
-    margin-bottom: 5px;
-}
-
-.register-link a {
-    text-decoration: none;
-    font-weight: 500;
-    color: #0d6efd;
-}
-
-.register-link a:hover {
-    text-decoration: underline;
-}
-
+/* ================= LOGIN PAGE ================= */
 
 #login {
     display: flex;
@@ -148,7 +84,6 @@ html, body {
 
 #Lright {
     width: 50%;
-    height: 100%;
     overflow: hidden;
 }
 
@@ -156,4 +91,81 @@ html, body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+    width: 550px;
+    height: 650px;
+}
+
+/* ================= ADMIN DASHBOARD  Base================= */
+
+#Amain {
+    display: flex;
+    min-height: calc(100vh - 56px);
+}
+
+/* Sidebar */
+#Aleft {
+    width: 240px;
+    background-color: #0a1f44;
+    padding: 20px;
+    color: #ffffff;
+}
+
+/* Sidebar buttons – NEW COLORS */
+#Aleft a {
+    display: block;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+#Aleft a:hover {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    transform: translateX(5px);
+}
+
+/* Right Content */
+#Aright {
+    flex: 1;
+    padding: 30px;
+}
+
+/* Content Box */
+.content-box {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+/* Main layout already flex */
+#Amain {
+    display: flex;
+    height: calc(100vh - 56px); /* navbar height */
+}
+
+/* Sidebar fixed height */
+#Aleft {
+    width: 240px;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 🔥 Scroll only content area */
+#Aright {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    padding: 30px;
 }

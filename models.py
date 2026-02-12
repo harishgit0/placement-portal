@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -15,6 +16,11 @@ class User(db.Model,UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     student = db.relationship('Student', backref='user', uselist=False)
     company = db.relationship('Company', backref='user', uselist=False)
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 # ---------------- STUDENT
 class Student(db.Model):

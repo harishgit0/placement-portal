@@ -1,0 +1,74 @@
+{% extends "base_admin.html" %}
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <h2 class="mb-4">Registered Companies</h2>
+
+    {% if companies %}
+        {% for company in companies %}
+        <div class="card shadow-sm mb-4 border-0">
+            
+            <!-- Card Header -->
+            <div class="card-header d-flex justify-content-between align-items-center bg-dark text-white">
+                <div>
+                    <strong>{{ company.company_name }}</strong>
+                    <div class="small text-muted">
+                        HR: {{ company.hr_contact or "N/A" }}
+                    </div>
+                </div>
+
+                <!-- Status Badge -->
+                <span class="badge rounded-pill
+                    {% if company.approval_status == 'Approved' %} bg-success
+                    {% elif company.approval_status == 'Rejected' %} bg-danger
+                    {% elif company.approval_status == 'Blacklisted' %} bg-dark
+                    {% else %} bg-warning text-dark
+                    {% endif %}">
+                    {{ company.approval_status }}
+                </span>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+                
+                <!-- Website -->
+                <p class="mb-2">
+                    <strong>Website:</strong>
+                    {% if company.website %}
+                        <a href="{{ company.website }}" target="_blank">{{ company.website }}</a>
+                    {% else %}
+                        <span class="text-muted">Not provided</span>
+                    {% endif %}
+                </p>
+
+                <!-- Actions -->
+                <div class="btn-group mt-2 mt-md-0">
+                    {% if company.approval_status == 'Pending' %}
+                        <a href="{{ url_for('admin_approve_company', company_id=company.id) }}" 
+                           class="btn btn-success btn-sm">Approve</a>
+                        <a href="{{ url_for('admin_reject_company', company_id=company.id) }}" 
+                           class="btn btn-danger btn-sm">Reject</a>
+                    {% endif %}
+
+                    {% if company.approval_status != 'Blacklisted' %}
+                        <form action="{{ url_for('company_blacklist', company_id=company.id) }}" method="POST" class="d-inline">
+                            <button class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('Blacklist this company?')">
+                                Blacklist
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center py-4">
+            No companies registered yet.
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
