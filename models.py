@@ -33,6 +33,8 @@ class Student(db.Model):
     phone = db.Column(db.String(20))
     resume = db.Column(db.String(200))
     is_blacklisted = db.Column(db.Boolean, default=False)
+    applications = db.relationship('Application', backref='student', lazy=True)
+
 
 # ---------------- COMPANY ----------------
 class Company(db.Model):
@@ -43,6 +45,9 @@ class Company(db.Model):
     website = db.Column(db.String(150))
     approval_status = db.Column(db.String(20), default='Pending')
     is_blacklisted = db.Column(db.Boolean, default=False)
+    drives = db.relationship('PlacementDrive', backref='company', lazy=True)
+    
+
 
 # ---------------- PLACEMENT DRIVE ----------------
 class PlacementDrive(db.Model):
@@ -54,6 +59,8 @@ class PlacementDrive(db.Model):
     deadline = db.Column(db.Date)
     status = db.Column(db.String(20), default='Pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    applications = db.relationship('Application', backref='drive', lazy=True)
+
 
 # ---------------- APPLICATION ----------------
 class Application(db.Model):

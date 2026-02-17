@@ -1,0 +1,42 @@
+{% extends "base_admin.html" %}
+
+{% block title %}Applications{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Applications</h3>
+
+    {% if applications %}
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Drive ID</th>
+                <th>Company</th>
+                <th>Student Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application.id }}</td>
+                <td>
+                    <span class="badge bg-secondary">
+                        {{ application.status }}
+                    </span>
+                </td>
+                <td>{{ application.drive_id }}</td>
+                <td><li>{{ application.drive.company.company_name }}</li>
+                </td>
+                <td><li>{{ application.student.name }}</li>
+</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="text-muted">No applications found.</p>
+    {% endif %}
+</div>
+{% endblock %}

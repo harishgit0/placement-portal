@@ -104,19 +104,29 @@ def company_blacklist(company_id):
     company.is_blacklisted = True
     company.approval_status = 'Blacklisted'
 
+    for drive in company.drives:
+        drive.status = 'Cancelled'
+
     db.session.commit()
 
-    flash(f"{company.company_name} has been blacklisted.", "danger")
+    flash(f"{company.company_name} has been blacklisted. All drives cancelled.", "danger")
     return redirect(url_for('admin_company'))
+
 @app.route('/admin_company/approve/<int:company_id>')
 @login_required
 def admin_approve_company(company_id):
     admin_required()
     company = Company.query.get_or_404(company_id)
+
     company.approval_status = 'Approved'
+    company.is_blacklisted = False
+
+    # 🔥 AUTO-APPROVE ALL DRIVES
+    for drive in company.drives:
+        drive.status = 'Approved'
+
     db.session.commit()
     return redirect(url_for('admin_company'))
-
 
 @app.route('/admin_company/reject/<int:company_id>')
 @login_required
@@ -134,7 +144,49 @@ def admin_student():
     students=Student.query.all()
     return render_template('admin_student.html',students=students)
 
+@app.route('/admin/student/blacklist/<int:student_id>', methods=['POST'])
+@login_required
+def student_blacklist(student_id):
+    admin_required()
+    student = Student.query.get_or_404(student_id)
 
+    student.is_blacklisted = True
+    student.approval_status = 'Blacklisted'
+
+    db.session.commit()
+
+    flash(f"{student.name} has been blacklisted.", "danger")
+    return redirect(url_for('admin_student'))
+
+
+
+@app.route('/admin_company_applications')
+@login_required
+def admin_company_applications():
+    admin_required()
+    applications=PlacementDrive.query.all()
+    return render_template('admin_company_applications.html',applications=applications)
+
+
+@app.route('/admin_student_applications')
+@login_required
+def admin_student_applications():
+    admin_required()
+    applications=Application.query.all()
+    return render_template('admin_student_applications.html',applications=applications)
+
+@app.route('/admin_ongoing_drives')
+@login_required
+def admin_ongoing_drives():
+    admin_required()
+
+    from datetime import date
+    drives = PlacementDrive.query.filter(
+        PlacementDrive.status == 'Approved',
+        PlacementDrive.deadline >= date.today()
+    ).all()
+
+    return render_template('admin_ongoing_drives.html', drives=drives)
 
 # --------- DATABASE CREATION + ADMIN ----------
 with app.app_context():

@@ -1,0 +1,52 @@
+{% extends "base_admin.html" %}
+
+{% block title %}Applications{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Job Applications</h3>
+
+    {% if applications %}
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Eligibility</th>
+                <th>Deadline</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application.id }}</td>
+                <td>{{ application.company.company_name }}</td>
+                <td>{{ application.job_title }}</td>
+                <td class="text-truncate" style="max-width: 250px;">
+                    {{ application.job_description }}
+                </td>
+                <td>{{ application.eligibility }}</td>
+                <td>{{ application.deadline }}</td>
+
+                <td>
+                    {% if application.status == "Open" %}
+                        <span class="badge bg-success">Open</span>
+                    {% elif application.status == "Closed" %}
+                        <span class="badge bg-danger">Closed</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ application.status }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="text-muted">No applications found.</p>
+    {% endif %}
+</div>
+{% endblock %}
