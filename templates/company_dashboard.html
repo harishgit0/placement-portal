@@ -1,0 +1,18 @@
+{% extends "base_company.html" %}
+
+{% block title %}Dashbard{% endblock %}
+
+{% block content %}
+<h1>Upcoming Drives</h1>
+{%for drive in drives%}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Drive ID: {{drive.id}}</h5>
+        <p class="card-text">Job Title: {{drive.job_title}}</p>
+        <p class="card-text">Job Description: {{drive.job_description}}</p>
+        <p class="card-text">Eligibility: {{drive.eligibility}}</p>
+        <p class="card-text">Deadline: {{drive.deadline}}</p>
+        <p class="card-text">Status: {{drive.status}}</p>
+{%endfor%}
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base_company.html" %}
+
+{% block title %}Drives{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-semibold mb-0">Your Placement Drives</h4>
+    <a href="{{ url_for('company_create_drive') }}" class="btn btn-primary">
+        + Create Drive
+    </a>
+</div>
+
+{% if drives %}
+    <div class="row">
+        {% for drive in drives %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold mb-2">
+                        {{ drive.job_title }}
+                    </h5>
+
+                    <p class="text-muted small mb-2">
+                        Drive ID: {{ drive.id }}
+                    </p>
+
+                    <p class="card-text mb-2">
+                        {{ drive.job_description }}
+                    </p>
+
+                    <ul class="list-unstyled small mb-3">
+                        <li><strong>Eligibility:</strong> {{ drive.eligibility }}</li>
+                        <li><strong>Deadline:</strong> {{ drive.deadline }}</li>
+                    </ul>
+
+                    <span class="badge 
+                        {% if drive.status == 'Approved' %}
+                            bg-success
+                        {% elif drive.status == 'Pending' %}
+                            bg-warning text-dark
+                        {% else %}
+                            bg-secondary
+                        {% endif %}
+                    ">
+                        {{ drive.status }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">
+        No drives created yet. Click <strong>Create Drive</strong> to add one.
+    </div>
+{% endif %}
+
+{% endblock %}

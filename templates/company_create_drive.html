@@ -1,0 +1,62 @@
+{% extends "base_company.html" %}
+
+{% block title %}Create Drive{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Create Placement Drive</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('company_create_drive') }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Job Title</label>
+                    <input type="text" class="form-control" name="job_title" placeholder="e.g. Software Engineer" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Job Description</label>
+                    <textarea class="form-control" name="description" rows="4"
+                        placeholder="Describe role, responsibilities, skills required" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Eligibility</label>
+                    <input type="text" class="form-control" name="eligibility"
+                        placeholder="e.g. B.Tech, CGPA ≥ 7.0">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Application Deadline</label>
+                    <input type="date" class="form-control" name="deadline" required>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ url_for('company_drives') }}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Create Drive
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

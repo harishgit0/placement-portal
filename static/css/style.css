@@ -155,40 +155,47 @@ html, body {
 }
 
 /* ------------Company css styles----------------- */
+/* ------------ Company UI styles (UPDATED THEME) ----------------- */
 
-/* Navbar */
+/* Company Navbar */
 .navbar.company-navbar {
-    background-color: #1f7a63 !important;
+    background-color: #1f2937 !important; /* Charcoal */
 }
 
+/* Navbar links */
+.navbar.company-navbar .nav-link,
+.navbar.company-navbar .navbar-brand {
+    color: #e5e7eb !important;
+    font-weight: 500;
+}
 
-/* Navbar brand */
-#Cmain .navbar-brand {
-    letter-spacing: 0.4px;
+.navbar.company-navbar .nav-link:hover {
+    color: #ffffff !important;
 }
 
 /* Main layout */
 #Cmain {
     display: flex;
     height: calc(100vh - 56px);
+    background-color: #f9fafb;
 }
 
 /* Sidebar */
 #Cleft {
     width: 240px;
     height: 100%;
-    background-color: #f3f7f5;
-    border-right: 1px solid #dbe5e1;
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
     padding: 26px 12px;
 }
 
-/* Sidebar button links */
+/* Sidebar links */
 #Cleft a {
     display: block;
     padding: 12px 18px;
     margin: 10px 0;
-    background-color: #e8f2ee;
-    color: #1f7a63;
+    background-color: #f1f5f9;
+    color: #1f2937;
     text-decoration: none;
     font-weight: 500;
     border-radius: 10px;
@@ -197,9 +204,15 @@ html, body {
 
 /* Hover effect */
 #Cleft a:hover {
-    background-color: #1f7a63;
+    background-color: #2563eb;
     color: #ffffff;
     transform: translateX(4px);
+}
+
+/* Active link (optional but recommended) */
+#Cleft a.active {
+    background-color: #2563eb;
+    color: #ffffff;
 }
 
 /* Right content */
@@ -216,4 +229,15 @@ html, body {
     padding: 30px;
     border-radius: 14px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* Buttons inside company pages */
+.btn-company-primary {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-company-primary:hover {
+    background-color: #1d4ed8;
 }

@@ -7,6 +7,10 @@ def admin_required():
     if current_user.role != 'admin':
         abort(403)
 
+def company_required():
+    if current_user.role != 'company':
+        abort(403)
+
 
 
 app = Flask(__name__)
@@ -45,8 +49,8 @@ def login():
                     return redirect('/admin_dashboard')
                 # elif user.role == 'student':
                 #     return redirect('/student_dashboard')
-                # elif user.role == 'company':
-                #     return redirect('/company_dashboard')
+                elif user.role == 'company':
+                    return redirect('/company_dashboard')
         return render_template('login.html',error='Invalid email or password')
     
 
@@ -54,22 +58,40 @@ def login():
 def register():
     if request.method == 'GET':
         return render_template('register.html')
-    else:
-        email = request.form.get('email')
-        password = request.form.get('password')
-        role = request.form.get('role')
 
-        if email and password and role:
-            user = User(
-                email=email,
-                password=generate_password_hash(password),
-                role=role
-            )
-            db.session.add(user)
-            db.session.commit()
-            return redirect('/login')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    role = request.form.get('role')
 
+    if not email or not password or not role:
         return render_template('register.html', error='Invalid details')
+
+    # 1️⃣ Create User
+    user = User(
+        email=email,
+        password=generate_password_hash(password),
+        role=role
+    )
+    db.session.add(user)
+    db.session.commit()   # needed to get user.id
+
+    # 2️⃣ Create profile based on role
+    if role == 'student':
+        student = Student(user_id=user.id)
+        db.session.add(student)
+
+    elif role == 'company':
+        company = Company(
+            user_id=user.id,
+            approval_status='Approved'  # optional but useful
+        )
+        db.session.add(company)
+
+    # 3️⃣ Final commit
+    db.session.commit()
+
+    return redirect('/login')
+
 
 @app.route('/logout')
 @login_required
@@ -187,6 +209,96 @@ def admin_ongoing_drives():
     ).all()
 
     return render_template('admin_ongoing_drives.html', drives=drives)
+
+
+
+
+# ------------Company Routes------------
+
+@app.route('/company_dashboard')
+@login_required
+def company_dashboard():
+    company_required()
+
+    from datetime import date
+
+    # get logged-in user's company
+    company = current_user.company
+    if not company:
+        abort(403)
+
+    drives = PlacementDrive.query.filter(
+        PlacementDrive.company_id == company.id,   # ✅ FIX
+        PlacementDrive.deadline >= date.today()
+    ).all()
+
+    return render_template('company_dashboard.html', drives=drives)
+
+
+@app.route('/company_drives')
+@login_required
+def company_drives():
+    company_required()
+
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    drives = PlacementDrive.query.filter_by(company_id=company.id).all()
+
+    return render_template('company_drives.html', drives=drives)
+
+
+@app.route('/company_drives/create_drive', methods=['GET','POST'])
+@login_required
+def company_create_drive():
+    company_required()
+
+    if request.method == 'GET':
+        return render_template('company_create_drive.html')
+
+    job_title = request.form.get('job_title')
+    description = request.form.get('description')
+    deadline = request.form.get('deadline')
+    eligibility = request.form.get('eligibility')
+
+    if not (job_title and description and deadline):
+        return render_template('company_create_drive.html', error='Invalid details')
+
+    deadline = datetime.strptime(deadline, "%Y-%m-%d").date()
+
+    # ✅ THIS IS THE KEY LINE
+    company = Company.query.filter_by(user_id=current_user.id).first()
+
+    if not company:
+        abort(403)
+
+    drive = PlacementDrive(
+        job_title=job_title,
+        job_description=description,
+        eligibility=eligibility,
+        deadline=deadline,
+        company_id=company.id,   # ✅ CORRECT
+        status='Approved'
+    )
+
+    db.session.add(drive)
+    db.session.commit()
+
+    return redirect('/company_drives')
+
+
+@app.route('/company/student')
+@login_required
+def company_student():
+    company_required()  
+
+    company = current_user.company
+
+    drive_ids = [drive.id for drive in company.drives]
+    applications = Application.query.filter(Application.drive_id.in_(drive_ids)).all()
+
+    return render_template('company_student.html', applications=applications)
+
+
+
 
 # --------- DATABASE CREATION + ADMIN ----------
 with app.app_context():
