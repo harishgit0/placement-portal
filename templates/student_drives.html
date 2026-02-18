@@ -1,0 +1,48 @@
+{% extends "base_student.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h4 class="mb-4 fw-semibold">My Applications</h4>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Eligibility</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for app in applications %}
+            <tr>
+                <td class="fw-medium">{{ app.drive.job_title }}</td>
+                <td class="text-muted small">
+                    {{ app.drive.job_description[:80] }}{% if app.drive.job_description|length > 80 %}...{% endif %}
+                </td>
+                <td>{{ app.drive.eligibility }}</td>
+                <td>
+                    {% if app.status == 'Applied' %}
+                        <span class="badge bg-primary">Applied</span>
+                    {% elif app.status == 'Shortlisted' %}
+                        <span class="badge bg-success">Shortlisted</span>
+                    {% elif app.status == 'Rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ app.status }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                    No applications found.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

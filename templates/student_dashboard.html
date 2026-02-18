@@ -1,0 +1,136 @@
+{% extends "base_student.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- ================= Companies Section ================= -->
+<!-- ================= Companies Section ================= -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-semibold mb-0">Companies</h4>
+
+        <a href="{{ url_for('student_company') }}"
+        class="btn btn-sm btn-outline-primary">
+            View All Companies
+        </a>
+    </div>
+
+
+    <div class="row g-4">
+        {% for company in companies[:6] %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+
+                    <h5 class="card-title fw-semibold mb-2">
+                        {{ company.company_name }}
+                    </h5>
+
+                    <p class="card-text mb-1">
+                        <strong>HR Contact:</strong> {{ company.hr_contact or 'N/A' }}
+                    </p>
+
+                    <p class="card-text mb-1">
+                        <strong>Website:</strong>
+                        {% if company.website %}
+                            <a href="{{ company.website }}" target="_blank">
+                                {{ company.website }}
+                            </a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+
+                    <p class="card-text mb-3">
+                        <strong>Status:</strong>
+                        {% if company.approval_status == 'Approved' %}
+                            <span class="badge bg-success">Approved</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ company.approval_status }}</span>
+                        {% endif %}
+                    </p>
+
+                    <a href="{{ url_for('student_company_details', company_id=company.id) }}"
+                       class="btn btn-sm btn-outline-primary">
+                        View Details
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center text-muted py-5">
+            No companies available at the moment.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<!-- ================= Applications Section ================= -->
+<div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-semibold mb-0">My Applications</h4>
+
+        <a href="{{ url_for('student_drives') }}" class="btn btn-sm btn-outline-primary">
+            View All Drives
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table align-middle table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Description</th>
+                            <th>Eligibility</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for app in applications[:6] %}
+                        <tr>
+                            <td class="fw-medium">
+                                {{ app.drive.job_title }}
+                            </td>
+
+                            <td class="text-muted small">
+                                {{ app.drive.job_description[:80] }}
+                                {% if app.drive.job_description|length > 80 %}…{% endif %}
+                            </td>
+
+                            <td>
+                                {{ app.drive.eligibility }}
+                            </td>
+
+                            <td>
+                                {% if app.status == 'Applied' %}
+                                    <span class="badge bg-primary">Applied</span>
+                                {% elif app.status == 'Shortlisted' %}
+                                    <span class="badge bg-success">Shortlisted</span>
+                                {% elif app.status == 'Rejected' %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ app.status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-5">
+                                You haven’t applied to any drives yet.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

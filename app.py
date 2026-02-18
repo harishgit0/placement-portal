@@ -11,6 +11,10 @@ def company_required():
     if current_user.role != 'company':
         abort(403)
 
+def student_required():
+    if current_user.role != 'student':
+        abort(403)
+
 
 
 app = Flask(__name__)
@@ -47,8 +51,8 @@ def login():
                 login_user(user)
                 if user.role == 'admin':
                     return redirect('/admin_dashboard')
-                # elif user.role == 'student':
-                #     return redirect('/student_dashboard')
+                elif user.role == 'student':
+                    return redirect('/student_dashboard')
                 elif user.role == 'company':
                     return redirect('/company_dashboard')
         return render_template('login.html',error='Invalid email or password')
@@ -298,7 +302,46 @@ def company_student():
     return render_template('company_student.html', applications=applications)
 
 
+# -----------------------Student Routes-----------------------
 
+
+@app.route('/student_dashboard')
+@login_required
+def student_dashboard():
+    student_required()
+    student=current_user.student
+    companies = Company.query.filter(
+    Company.approval_status == 'Approved',
+    Company.is_blacklisted == False
+).all()
+
+    applications=Application.query.filter_by(student_id=student.id).all()
+    return render_template('student_dashboard.html',applications=applications,companies=companies)
+
+@app.route('/student_drives')
+@login_required
+def student_drives():
+    student_required()
+    student=current_user.student
+    applications=Application.query.filter_by(student_id=student.id).all()
+    return render_template('student_drives.html',applications=applications)
+
+
+@app.route('/student_company')
+@login_required
+def student_company():
+    student_required()
+    companies=Company.query.all()
+    return render_template('student_company.html',companies=companies)
+
+
+@app.route('/student_company/details/<int:company_id>')
+@login_required
+def student_company_details(company_id):    
+    student_required()
+    company=Company.query.get_or_404(company_id)
+    drives=PlacementDrive.query.filter_by(company_id=company.id).all()
+    return render_template('student_company_details.html',company=company,drives=drives)
 
 # --------- DATABASE CREATION + ADMIN ----------
 with app.app_context():
