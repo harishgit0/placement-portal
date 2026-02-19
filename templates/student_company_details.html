@@ -53,10 +53,15 @@
                         {% endif %}
                     </div>
 
-                    {% if drive.status == 'Approved' or 'open' %}
-                        <a href="#" class="btn btn-sm btn-primary">
-                            Apply
-                        </a>
+                    {% if drive.status in ['Approved', 'Open'] %}
+
+                        <form method="POST" action="{{ url_for('student_apply', drive_id=drive.id) }}">
+                            <button type="submit" class="btn btn-primary">
+                                Apply
+                            </button>
+                        </form>
+
+
                     {% endif %}
                 </div>
 

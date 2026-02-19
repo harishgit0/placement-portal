@@ -1,0 +1,75 @@
+{% extends "base_company.html" %}
+
+{% block title %}Drive Applications{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Drive Info -->
+    <div class="mb-4">
+        <h4 class="fw-semibold">Applications for this Drive</h4>
+        <p class="text-muted mb-0">
+            {{ drive.job_description }}
+        </p>
+    </div>
+
+    {% if applications %}
+        <div class="row">
+            {% for app in applications %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+
+                        <h5 class="card-title fw-semibold mb-2">
+                            {{ app.student.name }}
+                        </h5>
+
+                        <p class="card-text small mb-1">
+                            <strong>Roll No:</strong> {{ app.student.roll_no }}
+                        </p>
+
+                        <p class="card-text small mb-3">
+                            <strong>Status:</strong>
+                            <span class="badge
+                                {% if app.status == 'Applied' %}
+                                    bg-primary
+                                {% elif app.status == 'Shortlisted' %}
+                                    bg-success
+                                {% elif app.status == 'Rejected' %}
+                                    bg-danger
+                                {% else %}
+                                    bg-secondary
+                                {% endif %}
+                            ">
+                                {{ app.status }}
+                            </span>
+                        </p>
+
+                        <!-- Optional: View Student -->
+                        <a href="{{ url_for('company_student_details', student_id=app.student.id) }}"
+                           class="btn btn-sm btn-outline-primary">
+                            View Student
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            No students have applied to this drive yet.
+        </div>
+    {% endif %}
+
+    <!-- Go Back -->
+    <div class="mt-4">
+        <a href="{{ url_for('company_drives') }}" class="btn btn-secondary">
+            ← Go Back
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

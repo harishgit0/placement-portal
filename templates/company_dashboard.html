@@ -1,18 +1,66 @@
 {% extends "base_company.html" %}
 
-{% block title %}Dashbard{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Upcoming Drives</h1>
-{%for drive in drives%}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Drive ID: {{drive.id}}</h5>
-        <p class="card-text">Job Title: {{drive.job_title}}</p>
-        <p class="card-text">Job Description: {{drive.job_description}}</p>
-        <p class="card-text">Eligibility: {{drive.eligibility}}</p>
-        <p class="card-text">Deadline: {{drive.deadline}}</p>
-        <p class="card-text">Status: {{drive.status}}</p>
-{%endfor%}
+<div class="container mt-4">
 
+    <h3 class="fw-semibold mb-4">Upcoming Placement Drives</h3>
+
+    {% if drives %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Job Title</th>
+                    <th>Description</th>
+                    <th>Eligibility</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for drive in drives %}
+                <tr>
+                    <td class="text-center">{{ drive.id }}</td>
+                    <td>{{ drive.job_title }}</td>
+
+                    <td style="max-width: 300px;">
+                        <span class="d-inline-block text-truncate" style="max-width: 300px;">
+                            {{ drive.job_description }}
+                        </span>
+                    </td>
+
+                    <td>{{ drive.eligibility }}</td>
+                    <td>{{ drive.deadline.strftime('%d %b %Y') }}</td>
+
+                    <td class="text-center">
+                        <span class="badge 
+                            {% if drive.status == 'Approved' %}
+                                bg-success
+                            {% elif drive.status == 'Pending' %}
+                                bg-warning text-dark
+                            {% else %}
+                                bg-secondary
+                            {% endif %}
+                        ">
+                            {{ drive.status }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            No upcoming drives available.
+        </div>
+    {% endif %}
+
+</div>
 {% endblock %}

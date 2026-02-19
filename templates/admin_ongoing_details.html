@@ -1,0 +1,57 @@
+{% extends "base_admin.html" %}
+
+{% block title %}Drive Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h3 class="mb-4 fw-semibold">Placement Drive Details</h3>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold text-muted">Company</div>
+                <div class="col-md-8">{{ drive.company.company_name }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold text-muted">Job Title</div>
+                <div class="col-md-8">{{ drive.job_title }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold text-muted">Job Description</div>
+                <div class="col-md-8">
+                    <p class="mb-0">{{ drive.job_description }}</p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold text-muted">Eligibility</div>
+                <div class="col-md-8">{{ drive.eligibility }}</div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4 fw-bold text-muted">Application Deadline</div>
+                <div class="col-md-8">
+                    {{ drive.deadline.strftime('%d %b %Y') }}
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('admin_ongoing_drives') }}" class="btn btn-secondary">
+                    ← Back to Drives
+                </a>
+
+                <a href="{{ url_for('admin_student_applications', drive_id=drive.id) }}"
+                   class="btn btn-primary">
+                    View Applications
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

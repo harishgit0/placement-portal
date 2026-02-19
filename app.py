@@ -214,10 +214,35 @@ def admin_ongoing_drives():
 
     return render_template('admin_ongoing_drives.html', drives=drives)
 
+@app.route('/admin_ongoing_details/<int:drive_id>')
+@login_required
+def admin_ongoing_details(drive_id):
+    admin_required()
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    return render_template('admin_ongoing_details.html', drive=drive)
 
 
+@app.route('/admin_student_details/<int:student_id>')
+@login_required
+def admin_student_details(student_id):
+    admin_required()
+    student = Student.query.get_or_404(student_id)
+    return render_template('admin_student_details.html', student=student)
 
-# ------------Company Routes------------
+@app.route('/admin_drive/complete/<int:drive_id>', methods=['POST'])
+@login_required
+def admin_mark_drive_complete(drive_id):
+    admin_required()
+
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    drive.status = 'Completed'
+
+    db.session.commit()
+    flash("Drive marked as completed.", "success")
+    return redirect(url_for('admin_ongoing_drives'))
+
+
+# ---------------------------Company Routes-------------------------
 
 @app.route('/company_dashboard')
 @login_required
@@ -302,6 +327,50 @@ def company_student():
     return render_template('company_student.html', applications=applications)
 
 
+@app.route('/company/drive/details/<int:drive_id>')
+@login_required
+def company_drive_details(drive_id):
+    company_required()
+    company = current_user.company
+    drive_ids = [drive.id for drive in company.drives]
+    drive = PlacementDrive.query.get_or_404(drive_id)
+    applications = Application.query.filter(Application.drive_id.in_(drive_ids), Application.drive_id == drive_id).all()
+    return render_template('company_drive_details.html', drive=drive, applications=applications)
+
+
+@app.route('/company_student_details/<int:student_id>')
+@login_required
+def company_student_details(student_id):
+    company_required()
+
+    student = Student.query.get_or_404(student_id)
+
+    application = Application.query.filter_by(
+        student_id=student.id
+    ).first_or_404()
+
+    return render_template(
+        'company_student_details.html',
+        student=student,
+        application=application   # ✅ object, not int
+    )
+
+
+@app.route('/company/application/update/<int:application_id>', methods=['POST'])
+@login_required
+def company_update_application_status(application_id):
+    company_required()
+
+    application = Application.query.get_or_404(application_id)
+
+    new_status = request.form.get('status')
+
+    application.status = new_status
+    db.session.commit()
+
+    flash(f"Application marked as {new_status}.", "success")
+    return redirect(request.referrer)
+
 # -----------------------Student Routes-----------------------
 
 
@@ -342,6 +411,39 @@ def student_company_details(company_id):
     company=Company.query.get_or_404(company_id)
     drives=PlacementDrive.query.filter_by(company_id=company.id).all()
     return render_template('student_company_details.html',company=company,drives=drives)
+
+
+
+@app.route('/student_apply/<int:drive_id>', methods=['POST'])
+@login_required
+def student_apply(drive_id):
+    student_required()
+
+    student = current_user.student
+    drive = PlacementDrive.query.get_or_404(drive_id)
+
+    #  Prevent duplicate applications
+    existing_application = Application.query.filter_by(
+        student_id=student.id,
+        drive_id=drive.id
+    ).first()
+
+    if existing_application:
+        flash("You have already applied to this drive.", "warning")
+        return redirect(url_for('student_drives'))
+
+    application = Application(
+        student_id=student.id,
+        drive_id=drive.id,
+        status='Waiting'
+    )
+
+    db.session.add(application)
+    db.session.commit()
+
+    flash("Application submitted successfully!", "success")
+    return redirect(url_for('student_drives'))
+
 
 # --------- DATABASE CREATION + ADMIN ----------
 with app.app_context():

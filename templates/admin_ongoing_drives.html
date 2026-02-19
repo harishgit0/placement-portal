@@ -1,38 +1,78 @@
 {% extends "base_admin.html" %}
 
-{% block title %}Applications{% endblock %}
+{% block title %}Ongoing Drives{% endblock %}
 
 {% block content %}
-{% for drive in drives %}
-
 <div class="container mt-4">
-    <h3 class="mb-3">Ongoing Drive</h3>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Company</th>
-                <th>Job Title</th>
-                <th>Description</th>
-                <th>Eligibility</th>
-                <th>Deadline</th>
-            </tr>
-        </thead>
+    <h3 class="mb-4 fw-semibold">Ongoing Placement Drives</h3>
 
-        <tbody>
-            <tr>
-                <td>{{ drive.id }}</td>
-                <td>{{ drive.company.company_name }}</td>
-                <td>{{ drive.job_title }}</td>
-                <td class="text-truncate" style="max-width: 250px;">
-                    {{ drive.job_description }}
-                </td>
-                <td>{{ drive.eligibility }}</td>
-                <td>{{ drive.deadline }}</td>
-            </tr>
-        </tbody>
-    </table>
+    {% if drives %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                    <th>Description</th>
+                    <th>Eligibility</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for drive in drives %}
+                <tr>
+                    <td class="text-center">{{ drive.id }}</td>
+
+                    <td>{{ drive.company.company_name }}</td>
+
+                    <td>{{ drive.job_title }}</td>
+
+                    <td style="max-width: 250px;">
+                        <span class="d-inline-block text-truncate" style="max-width: 250px;">
+                            {{ drive.job_description }}
+                        </span>
+                    </td>
+
+                    <td>{{ drive.eligibility }}</td>
+
+                    <td class="text-center">
+                        {{ drive.deadline.strftime('%d %b %Y') }}
+                    </td>
+
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2">
+
+                            <a href="{{ url_for('admin_ongoing_details', drive_id=drive.id) }}"
+                               class="btn btn-sm btn-primary">
+                                View Details
+                            </a>
+
+                            <form method="POST"
+                                  action="{{ url_for('admin_mark_drive_complete', drive_id=drive.id) }}"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Mark this drive as completed?');">
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    Mark Complete
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-info">
+            No ongoing drives available.
+        </div>
+    {% endif %}
+
 </div>
-{% endfor %}
 {% endblock %}

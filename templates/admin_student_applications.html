@@ -4,39 +4,67 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h3 class="mb-3">Applications</h3>
+
+    <h3 class="mb-4 fw-semibold">Student Applications</h3>
 
     {% if applications %}
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Status</th>
-                <th>Drive ID</th>
-                <th>Company</th>
-                <th>Student Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for application in applications %}
-            <tr>
-                <td>{{ application.id }}</td>
-                <td>
-                    <span class="badge bg-secondary">
-                        {{ application.status }}
-                    </span>
-                </td>
-                <td>{{ application.drive_id }}</td>
-                <td><li>{{ application.drive.company.company_name }}</li>
-                </td>
-                <td><li>{{ application.student.name }}</li>
-</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Drive ID</th>
+                    <th>Company</th>
+                    <th>Student</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td class="text-center">{{ application.id }}</td>
+
+                    <td class="text-center">
+                        {% if application.status == 'Pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif application.status == 'Approved' %}
+                            <span class="badge bg-success">Approved</span>
+                        {% elif application.status == 'Rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ application.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">{{ application.drive_id }}</td>
+
+                    <td>
+                        {{ application.drive.company.company_name }}
+                    </td>
+
+                    <td>
+                        {{ application.student.name }}
+                    </td>
+
+                    <td class="text-center">
+                        <a href="{{ url_for('admin_student_details', student_id=application.student.id) }}"
+                           class="btn btn-sm btn-outline-primary">
+                            View Student
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
     {% else %}
-        <p class="text-muted">No applications found.</p>
+        <div class="alert alert-info">
+            No applications found for this drive.
+        </div>
     {% endif %}
+
 </div>
 {% endblock %}
