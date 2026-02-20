@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<!-- Header with Back button -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-semibold mb-0">Placement Drives</h4>
 
@@ -42,7 +41,6 @@
                     {{ drive.deadline.strftime('%d %b %Y') if drive.deadline else 'N/A' }}
                 </p>
 
-                <!-- Status + Action -->
                 <div class="d-flex justify-content-between align-items-center mt-auto">
                     <div>
                         <strong>Status:</strong>

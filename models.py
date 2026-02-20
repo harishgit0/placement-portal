@@ -22,7 +22,7 @@ class User(db.Model,UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-# ---------------- STUDENT
+# ---------------- STUDENT-------------------
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)

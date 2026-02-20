@@ -33,7 +33,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-#------------Authentication and home routes-------------
+#----------------------------------------------------Authentication and home routes--------------------------------------
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -70,16 +70,14 @@ def register():
     if not email or not password or not role:
         return render_template('register.html', error='Invalid details')
 
-    # 1️⃣ Create User
     user = User(
         email=email,
         password=generate_password_hash(password),
         role=role
     )
     db.session.add(user)
-    db.session.commit()   # needed to get user.id
+    db.session.commit()   
 
-    # 2️⃣ Create profile based on role
     if role == 'student':
         student = Student(user_id=user.id)
         db.session.add(student)
@@ -87,11 +85,10 @@ def register():
     elif role == 'company':
         company = Company(
             user_id=user.id,
-            approval_status='Approved'  # optional but useful
+            approval_status='Approved'  
         )
         db.session.add(company)
 
-    # 3️⃣ Final commit
     db.session.commit()
 
     return redirect('/login')
@@ -103,7 +100,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# ---------ADMIN PAGE ROUTES------------
+# ----------------------------------------------------------ADMIN PAGE ROUTES------------------------------------------------------------------
 
 @app.route('/admin_dashboard')
 @login_required
@@ -147,7 +144,6 @@ def admin_approve_company(company_id):
     company.approval_status = 'Approved'
     company.is_blacklisted = False
 
-    # 🔥 AUTO-APPROVE ALL DRIVES
     for drive in company.drives:
         drive.status = 'Approved'
 
@@ -242,7 +238,7 @@ def admin_mark_drive_complete(drive_id):
     return redirect(url_for('admin_ongoing_drives'))
 
 
-# ---------------------------Company Routes-------------------------
+# ----------------------------------------------------------------------Company Routes------------------------------------------------------------
 
 @app.route('/company_dashboard')
 @login_required
@@ -251,13 +247,12 @@ def company_dashboard():
 
     from datetime import date
 
-    # get logged-in user's company
     company = current_user.company
     if not company:
         abort(403)
 
     drives = PlacementDrive.query.filter(
-        PlacementDrive.company_id == company.id,   # ✅ FIX
+        PlacementDrive.company_id == company.id,  
         PlacementDrive.deadline >= date.today()
     ).all()
 
@@ -293,7 +288,6 @@ def company_create_drive():
 
     deadline = datetime.strptime(deadline, "%Y-%m-%d").date()
 
-    # ✅ THIS IS THE KEY LINE
     company = Company.query.filter_by(user_id=current_user.id).first()
 
     if not company:
@@ -304,7 +298,7 @@ def company_create_drive():
         job_description=description,
         eligibility=eligibility,
         deadline=deadline,
-        company_id=company.id,   # ✅ CORRECT
+        company_id=company.id,  
         status='Approved'
     )
 
@@ -352,7 +346,7 @@ def company_student_details(student_id):
     return render_template(
         'company_student_details.html',
         student=student,
-        application=application   # ✅ object, not int
+        application=application  
     )
 
 
@@ -371,7 +365,7 @@ def company_update_application_status(application_id):
     flash(f"Application marked as {new_status}.", "success")
     return redirect(request.referrer)
 
-# -----------------------Student Routes-----------------------
+# ---------------------------------------------------------------Student Routes----------------------------------------------------------------
 
 
 @app.route('/student_dashboard')

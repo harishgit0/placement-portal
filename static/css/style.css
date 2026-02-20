@@ -1,4 +1,4 @@
-/* ================= GLOBAL RESET ================= */
+/* ================= GLOBAL STYLES ================= */
 * {
     margin: 0;
     padding: 0;
@@ -155,11 +155,10 @@ html, body {
 }
 
 /* ------------Company css styles----------------- */
-/* ------------ Company UI styles (UPDATED THEME) ----------------- */
 
 /* Company Navbar */
 .navbar.company-navbar {
-    background-color: #1f2937 !important; /* Charcoal */
+    background-color: #1f2937 !important;
 }
 
 /* Navbar links */
@@ -209,7 +208,7 @@ html, body {
     transform: translateX(4px);
 }
 
-/* Active link (optional but recommended) */
+/* Active link  */
 #Cleft a.active {
     background-color: #2563eb;
     color: #ffffff;
@@ -243,7 +242,6 @@ html, body {
 }
 
 
-/* ============ SHARED / STUDENT DASHBOARD ============= */
 /* ============ STUDENT DASHBOARD ============= */
 
 /* Layout */
@@ -280,7 +278,7 @@ html, body {
     transform: translateX(4px);
 }
 
-/* ACTIVE page (current route) */
+/* ACTIVE page  */
 #Sleft a.active {
     background-color: #2563eb;
     color: #ffffff;
